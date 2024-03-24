@@ -1,5 +1,6 @@
 import pygame as pg
 import random
+import math
 
 
 class ProgramState:
@@ -15,6 +16,7 @@ class ProgramState:
 class Point:
     x: int
     y: int
+    # color: [int, int, int]
 
     def __init__(self, x, y):
         self.x = x
@@ -40,6 +42,9 @@ def main():
     # 
     program_state = ProgramState()
     points: [Point] = []
+    functions = [
+        lambda point: math.sqrt((point.get_x() - 400)**2 + (point.get_y() - 400)**2) <= 400  # 400 == half of the screen
+    ]
     while running:
         clock.tick(60)
         window.fill((0, 0, 0))
@@ -55,7 +60,10 @@ def main():
         if program_state.is_adding_new_points:
             points.append(Point(random.randint(0, window_size[0]), random.randint(0, window_size[1])))
         for point in points:
-            pg.draw.circle(window, (127, 127, 127), point.get(), 5)
+            if functions[0](point):
+                pg.draw.circle(window, (255, 255, 255), point.get(), 5)
+            else:
+                pg.draw.circle(window, (127, 127, 127), point.get(), 5)
         pg.display.flip()
     pg.quit()
 
