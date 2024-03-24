@@ -1,11 +1,22 @@
 import pygame as pg
+import random
+
+
+class ProgramState:
+    is_adding_new_points: bool
+
+    def __init__(self):
+        self.is_adding_new_points = False
+
+    def switch_adding(self) -> None:
+        self.is_adding_new_points = not self.is_adding_new_points
 
 
 class Point:
     x: int
     y: int
 
-    def __init__(self, x, y) -> None:
+    def __init__(self, x, y):
         self.x = x
         self.y = y
 
@@ -27,11 +38,8 @@ def main():
     window = pg.display.set_mode(window_size)
     window.fill((255, 255, 255))
     # 
-    points: [Point] = [
-        Point(100, 100),
-        Point(200, 200),
-        Point(300, 300)
-    ]
+    program_state = ProgramState()
+    points: [Point] = []
     while running:
         clock.tick(60)
         window.fill((0, 0, 0))
@@ -39,9 +47,13 @@ def main():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     running = False
+                if event.key == pg.K_RETURN:
+                    program_state.switch_adding()
             if event.type == pg.QUIT:
                 running = False
         # End of event loop
+        if program_state.is_adding_new_points:
+            points.append(Point(random.randint(0, window_size[0]), random.randint(0, window_size[1])))
         for point in points:
             pg.draw.circle(window, (127, 127, 127), point.get(), 5)
         pg.display.flip()
