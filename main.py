@@ -13,14 +13,60 @@ class ProgramState:
         self.is_adding_new_points = not self.is_adding_new_points
 
 
+class Color:
+    red: int
+    green: int
+    blue: int
+
+    def __init__(self, r, g, b):
+        self.red = r
+        self.green = g
+        self.blue = b
+
+    def __add__(self, other) -> None:
+        if isinstance(other, Color):
+            self.red += other.red
+            self.green += other.green
+            self.blue += other.blue
+        else:
+            raise TypeError("You cannot add to color, comething that isn't another color")
+
+    def __sub__(self, other) -> None:
+        if isistance(other, Color):
+            self.red -= other.red
+            self.green -= other.green
+            self.blue -= other.blue
+        else:
+            raise TypeError("You cannot substract from color, comething that isn't another color")
+
+    def get(self) -> (int, int, int):
+        red = self.red
+        if red > 255:
+            red = 255
+        elif red < 0:
+            red = 0
+        green = self.green
+        if green > 255:
+            green = 255
+        elif green < 0:
+            green = 0
+        blue = self.blue
+        if blue > 255:
+            blue = 255
+        elif blue < 0:
+            blue = 0
+        return (red, green, blue)
+
+
 class Point:
     x: int
     y: int
-    # color: [int, int, int]
+    color: Color
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.color = Color(0, 0, 0)
 
     def get(self) -> (int, int):
         return (self.x, self.y)
@@ -30,6 +76,9 @@ class Point:
 
     def get_y(self) -> int:
         return self.y
+    
+    def get_color(self) -> (int, int, int):
+        return self.color.get()
 
 
 def main():
